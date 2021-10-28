@@ -1,12 +1,18 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  Sequelize,
+} from 'sequelize-typescript';
 
 @Table
-export class Product extends Model<Product> {
+export class Product extends Model {
   @Column({
     type: DataType.UUID,
     primaryKey: true,
     unique: true,
-    allowNull: false,
+    defaultValue: Sequelize.literal('gen_random_uuid()'),
   })
   id: string;
 
@@ -27,4 +33,14 @@ export class Product extends Model<Product> {
     allowNull: true,
   })
   quantity: number;
+
+  @Column({
+    type: DataType.DATE,
+  })
+  createdAt: string;
+
+  @Column({
+    type: DataType.DATE,
+  })
+  updatedAt: string;
 }
