@@ -3,6 +3,7 @@ interface IProduct {
   name: string;
   price: number;
   quantity: number;
-  created_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 export type { IProduct };
