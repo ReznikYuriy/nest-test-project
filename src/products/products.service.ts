@@ -11,7 +11,7 @@ export class ProductsService {
     private readonly productRepository: typeof Product,
   ) {}
 
-  private readonly products: IProduct[] = [];
+  // private readonly products: IProduct[] = [];
 
   /* createProduct(prod: Partial<IProduct>): IProduct {
     const newProd: IProduct = {
