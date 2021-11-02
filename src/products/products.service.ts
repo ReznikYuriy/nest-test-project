@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PRODUCT_REPOSITORY } from 'src/core/constants';
 import { CreateProductDto } from './dto';
 import { IProduct } from './interfaces';
-import { Product } from './product.entity';
+import { Product } from '../core/models';
 
 @Injectable()
 export class ProductsService {

@@ -1,6 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Product } from 'src/products/product.entity';
-import { User } from 'src/user/user.entity';
+import { Product, User } from 'src/core/models';
 import { SEQUELIZE, DEVELOPMENT, TEST, PRODUCTION } from '../constants';
 import { databaseConfig } from './database.config';
 
