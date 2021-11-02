@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { IUser } from 'src/user/interfaces';
 import { UserService } from '../user/user.service';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
@@ -9,8 +11,9 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
+  private readonly logger = new Logger(AuthService.name);
 
-  async validateUser(user_email: string, pass: string) {
+  async validateUser(user_email: string, pass: string): Promise<IUser> {
     // find if user exist with this email
     const user = await this.userService.findUserByEmail(user_email);
     if (!user) {
@@ -23,8 +26,7 @@ export class AuthService {
       return null;
     }
 
-    // tslint:disable-next-line: no-string-literal
-    const { password, ...result } = user['dataValues'];
+    const { ...result } = user['dataValues'];
     return result;
   }
 
@@ -43,27 +45,28 @@ export class AuthService {
       password: pass,
     });
 
-    // tslint:disable-next-line: no-string-literal
-    const { password, ...result } = newUser['dataValues'];
+    const { ...result } = newUser['dataValues'];
+    // this.logger.log(result);
 
-    // generate token
     const token = await this.generateToken(result);
-
     // return the user and the token
     return { user: result, token };
   }
 
-  private async generateToken(user) {
+  private async generateToken(user): Promise<string> {
     const token = await this.jwtService.signAsync(user);
     return token;
   }
 
-  private async hashPassword(password) {
+  private async hashPassword(password: string): Promise<string> {
     const hash = await bcrypt.hash(password, 10);
     return hash;
   }
 
-  private async comparePassword(enteredPassword, dbPassword) {
+  private async comparePassword(
+    enteredPassword: string,
+    dbPassword: string,
+  ): Promise<boolean> {
     const match = await bcrypt.compare(enteredPassword, dbPassword);
     return match;
   }
