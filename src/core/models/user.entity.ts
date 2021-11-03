@@ -4,7 +4,9 @@ import {
   Model,
   DataType,
   Sequelize,
+  HasMany,
 } from 'sequelize-typescript';
+import { Order } from '../models';
 
 @Table
 export class User extends Model {
@@ -51,4 +53,7 @@ export class User extends Model {
     type: DataType.DATE,
   })
   updatedAt: string;
+
+  @HasMany(() => Order, 'userId')
+  readonly orders: Order[];
 }
