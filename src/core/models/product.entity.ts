@@ -4,7 +4,9 @@ import {
   Model,
   DataType,
   Sequelize,
+  BelongsToMany,
 } from 'sequelize-typescript';
+import { Order, ProductOrder } from '.';
 
 @Table
 export class Product extends Model {
@@ -43,4 +45,7 @@ export class Product extends Model {
     type: DataType.DATE,
   })
   updatedAt: string;
+
+  @BelongsToMany(() => Order, () => ProductOrder)
+  orders: Order[];
 }
