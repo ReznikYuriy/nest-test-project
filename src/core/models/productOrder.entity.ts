@@ -24,4 +24,14 @@ export class ProductOrder extends Model {
   @ForeignKey(() => Order)
   @Column
   orderId: string;
+
+  @Column({
+    type: DataType.DATE,
+  })
+  createdAt: string;
+
+  @Column({
+    type: DataType.DATE,
+  })
+  updatedAt: string;
 }
