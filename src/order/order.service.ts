@@ -1,13 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ORDER_REPOSITORY } from 'src/core/constants';
-import { Order, User } from 'src/core/models';
-import { OrderDto } from './dto';
+import { ORDER_REPOSITORY, PRODUCT_ORDER_REPOSITORY } from 'src/core/constants';
+import { Order, Product, ProductOrder, User } from 'src/core/models';
+import { OrderDto, ProductOrderDto } from './dto';
 // import { IOrder } from './interfaces';
 
 @Injectable()
 export class OrderService {
   constructor(
     @Inject(ORDER_REPOSITORY) private readonly orderRepository: typeof Order,
+    @Inject(PRODUCT_ORDER_REPOSITORY)
+    private readonly productOrderRepository: typeof ProductOrder,
   ) {}
 
   async create(order: OrderDto, userId): Promise<Order> {
@@ -16,7 +18,13 @@ export class OrderService {
 
   async findAll(): Promise<Order[]> {
     return await this.orderRepository.findAll({
-      include: [{ model: User, attributes: { exclude: ['password'] } }],
+      include: [
+        {
+          model: User,
+          attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+        },
+        { model: Product, attributes: ['name', 'price'] },
+      ],
     });
   }
 
@@ -39,5 +47,9 @@ export class OrderService {
       );
 
     return { numberOfAffectedRows, updatedOrder };
+  }
+
+  async addProductToOrder(prodOrder: ProductOrderDto): Promise<ProductOrder> {
+    return await this.productOrderRepository.create(prodOrder);
   }
 }

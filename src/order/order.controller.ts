@@ -11,8 +11,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Order } from 'src/core/models';
-import { OrderDto } from './dto';
+import { Order, ProductOrder } from 'src/core/models';
+import { OrderDto, ProductOrderDto } from './dto';
 import { OrderService } from './order.service';
 
 @Controller('order')
@@ -66,5 +66,12 @@ export class OrderController {
       throw new NotFoundException("This Order doesn't exist");
     }
     return 'Successfully deleted';
+  }
+
+  @Post('add_prod')
+  async addProdToOrder(
+    @Body() prodOrder: ProductOrderDto,
+  ): Promise<ProductOrder> {
+    return await this.orderService.addProductToOrder(prodOrder);
   }
 }
